@@ -2,6 +2,7 @@ class Game {
     constructor() { //sets up table
         this.table = new Table(2) //x players
         this.round = null
+        this.GUI = new GUI(this)
     }
     start() { //begins the game.
        this.newRound()
@@ -14,6 +15,16 @@ class Game {
         }
     }
 
+    //getters
+    getTable() {
+        return this.getTable
+    }
+    getRound() {
+        return this.round
+    }
+    getGUI() {
+        return this.GUI
+    }
 
 
 
