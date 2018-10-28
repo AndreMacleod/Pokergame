@@ -1,8 +1,10 @@
+const Table = require('./Table.js')
+const Round = require('./Round.js')
 class Game {
     constructor() { //sets up table
         this.table = new Table(2) //x players
         this.round = null
-        this.GUI = new GUI(this)
+        //this.GUI = new GUI(this)
     }
     start() { //begins the game.
        this.newRound()
@@ -29,7 +31,7 @@ class Game {
 
 
 }
-
+module.exports = Game
 
 //table.getPlayers()[0].giveHoleCard(table.getDeck()[0]) //first card in deck
 //console.log(table.getPlayers())

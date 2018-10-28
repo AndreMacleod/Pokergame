@@ -1,4 +1,4 @@
-
+const Player = require('./Player.js')
 class Table {
     constructor(player_num) {
         this.player_num = player_num
@@ -18,3 +18,4 @@ class Table {
         return this.players
     }
 } 
+module.exports = Table

@@ -1,3 +1,4 @@
+const Card = require('./Card.js')
 class Deck {
     constructor() {
         this.deck = this.generateDeck()
@@ -16,3 +17,4 @@ class Deck {
         return this.deck
     }
 }
+module.exports = Deck

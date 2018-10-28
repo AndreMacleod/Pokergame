@@ -32,3 +32,4 @@ class Round {
         return this.state
     }
 }
+module.exports = Round

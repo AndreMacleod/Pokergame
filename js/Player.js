@@ -35,3 +35,4 @@ class Player {
         return this.has_folded
     }
 }
+module.exports = Player

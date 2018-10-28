@@ -7,3 +7,4 @@ class Card {
         return(this.number + ' of ' + this.suit)
     }
 } 
+module.exports = Card

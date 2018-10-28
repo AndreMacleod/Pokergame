@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<!-- helps browsers with file recognition- just chuck one up here at the start, not super importamnt-->
+<html>
+<!-- open html tag-->
+
+<head>
+    <!-- browser reads this stuff first, so here we import js files, put the title etc.-->
+  <!--  <link rel="stylesheet" href="css/main.css">-->
+    <script src="/socket.io/socket.io.js"></script>
+    <!--<script type="text/javascript" src="js/libraries/p5.js"></script>-->
+
+    <!-- script type tells what type of text is in the subfile, src is source: name of the source file-->
+
+    <title>Poker Game</title>
+</head>
+
+<script>
+    var socket = io();
+
+    socket.on('send_data', function (data) {
+       console.log(data)
+        //console.log('received ' + server_ball_array[0].y )
+    })
+</script>
