@@ -4,6 +4,9 @@ class Game {
         this.round = null
     }
     start() { //begins the game.
+       this.newRound()
+    }
+    newRound() {
         console.log("you started a game")
         if (this.round == null) {
             this.round = new Round(this) //PASS GAME to round to recursively call

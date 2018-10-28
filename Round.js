@@ -8,7 +8,7 @@ class Round {
     }
     start() {
         //if round is over
-        this.game.start()
+        this.game.newRound()
     }
 
     //helpers
@@ -22,7 +22,7 @@ class Round {
             }
         }
     }
-    
+
     getPot() {
         return this.pot
     }
