@@ -33,11 +33,15 @@ global_deck = new Deck() //on start lets gen a deck that tables can clone
 //NEW GAME STARTED
 var game = new Game() //new game
 game.start()
-
+console.log(game.table)
 io.on('connection', function (socket) {
     console.log("heya coneection")
+    console.log(game.table)
+    var data = {
+        table:game.table
+        }
     //socket.broadcast.emit('sendData', game)
-  //  socket.emit('send_data',game)
+    socket.emit('send_data',data)
 
 })
 module.exports = this
