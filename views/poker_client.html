@@ -5,9 +5,9 @@
 
 <head>
     <!-- browser reads this stuff first, so here we import js files, put the title etc.-->
-  <!--  <link rel="stylesheet" href="css/main.css">-->
+    <!--  <link rel="stylesheet" href="css/main.css">-->
     <script src="/socket.io/socket.io.js"></script>
-    <!--<script type="text/javascript" src="js/libraries/p5.js"></script>-->
+    <script type="text/javascript" src="Libraries/p5.js"></script>
 
     <!-- script type tells what type of text is in the subfile, src is source: name of the source file-->
 
@@ -16,9 +16,40 @@
 
 <script>
     var socket = io();
-
+    var table_object
+    var player_num
     socket.on('send_data', function (data) {
-       console.log(data)
+        console.log(data)
         //console.log('received ' + server_ball_array[0].y )
+        table_object = data.table
+        player_num = table_object.player_num
+        console.log(table_object.player_num)
     })
+
+    var bg
+    var table_object_img
+    var table_object_scale = 4
+    
+    function setup() {
+        createCanvas(window.innerWidth, window.innerHeight)
+        bg = loadImage("ass/background.jpg")
+        table_object_img = loadImage("ass/tableimg.png");
+        console.log('i eat shit')
+    }
+    function drawtable_object() {
+        console.log(game.getRound())
+    }
+    function draw() {
+        //drawtable_object()
+        background(bg)
+        if(table_object =! null){
+            image(table_object_img, window.innerWidth/2 - table_object_img.width * table_object_scale/2 , window.innerHeight/2 - table_object_img.height * (table_object_scale/2)*3/2 , table_object_img.width * table_object_scale , table_object_img.height * table_object_scale* 3/2);
+        }
+        console.log(player_num)
+        for(var i = 0; i < player_num; i++){
+            ellipse(window.innerWidth/2, window.innerHeight/2 - table_object_img.height * (table_object_scale/2)  + table_object_img.height * table_object_scale  * i , 60, 60) 
+            console.log('ellispes ' + i)
+            
+        }
+    }
 </script>
