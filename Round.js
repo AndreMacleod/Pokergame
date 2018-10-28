@@ -1,4 +1,4 @@
-class Round{
+class Round {
     constructor(game) {
         this.community_cards = []
         this.pot = 0
@@ -10,7 +10,7 @@ class Round{
         //if round is over
         this.game.start()
     }
-    
+
     //helpers
     nextState() {
         if (this.state == null) //if not yet init
@@ -22,7 +22,10 @@ class Round{
             }
         }
     }
-
+    
+    getPot() {
+        return this.pot
+    }
     //getters
     getState() {
         return this.state
