@@ -3,6 +3,7 @@ class Round {
         this.community_cards = []
         this.pot = 0
         this.game = game;
+        this.deck = global_deck //copy global deck
         this.state = states[0] //set the init state to preflop
         console.log("new round started")
     }
