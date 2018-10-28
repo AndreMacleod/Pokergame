@@ -1,11 +1,16 @@
-class Round {
-    constructor() {
+class Round{
+    constructor(game) {
         this.community_cards = []
         this.pot = 0
+        this.game = game;
         this.state = states[0] //set the init state to preflop
         console.log("new round started")
     }
-
+    start() {
+        //if round is over
+        this.game.start()
+    }
+    
     //helpers
     nextState() {
         if (this.state == null) //if not yet init

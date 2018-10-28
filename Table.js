@@ -23,7 +23,6 @@ class Table {
         return temp;
     }
 
-
     //getters
     getDeck() {
         return this.deck
