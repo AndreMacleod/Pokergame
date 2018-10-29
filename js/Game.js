@@ -1,32 +1,32 @@
 const Table = require('./Table.js')
 const Round = require('./Round.js')
 class Game {
-    constructor() { //sets up table
-        this.table = new Table(2) //x players
+    constructor(socketEngine) { //sets up table
+        this.table = new Table(2, socketEngine) //x players
         this.round = null
-        //this.GUI = new GUI(this)
+        this.socketEngine = socketEngine
+
     }
     start() { //begins the game.
-       this.newRound()
+        this.newRound()
     }
+    
     newRound() {
         console.log("you started a game")
         if (this.round == null) {
-            this.round = new Round(this) //PASS GAME to round to recursively call
+            this.round = new Round(this, this.socketEngine) //PASS GAME to round to recursively call
             this.round.start()
         }
     }
 
     //getters
     getTable() {
-        return this.getTable
+        return this.table
     }
     getRound() {
         return this.round
     }
-    getGUI() {
-        return this.GUI
-    }
+
 
 
 

@@ -12,9 +12,18 @@ class Deck {
         }
         return temp
     }
-      //getters
-      getDeck() {
+    //getters
+    getDeck() {
         return this.deck
+    }
+    shuffle() {
+        var j, x, i;
+        for (i = this.deck.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            x = this.deck[i];
+            this.deck[i] = this.deck[j];
+            this.deck[j] = x;
+        }
     }
 }
 module.exports = Deck

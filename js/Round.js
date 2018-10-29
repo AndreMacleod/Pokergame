@@ -1,17 +1,46 @@
+const Deck = require('./Deck.js')
 class Round {
-    constructor(game) {
+    constructor(game, socketEngine) {
         this.community_cards = []
+        this.socketEngine = socketEngine
         this.pot = 0
         this.game = game;
-        this.deck = global_deck //copy global deck
+        this.deck = new Deck()
         this.state = states[0] //set the init state to preflop
+        this.players = this.game.getTable().getPlayers()
         console.log("new round started")
+        this.deck.shuffle()
     }
     start() {
-        //if round is over
-        this.game.newRound()
-    }
 
+        if (this.state == states[0]) { //PREFLOP
+            this.preflop()
+            console.log(this.players)
+            this.getBets()
+          //  this.nextState()
+        }
+        //if round is over
+        //this.game.newRound()
+    }
+    getBets() {
+        for (var i = 0; i < this.players.length; i++) {
+            //ask each player options
+            //options go in player class,like player.fold, .bet ..
+        }
+
+    }
+   
+    preflop() { //give hole cards
+        //deal 2 cardsv
+        var deck_array = this.deck.getDeck()
+        for (var i = 0; i < this.players.length; i++) {
+            this.players[i].giveHoleCard(deck_array.shift()) //2 cards
+            this.players[i].giveHoleCard(deck_array.shift())
+        }
+    }
+    flop() {
+        
+    }
     //helpers
     nextState() {
         if (this.state == null) //if not yet init

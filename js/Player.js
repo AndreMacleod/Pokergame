@@ -1,6 +1,6 @@
 class Player {
-    constructor(name) {
-        this.name = name;
+    constructor(id) {
+        this.id = id;
         this.stack = 0
         this.blind_type = null
         this.hole_cards = []
@@ -8,6 +8,9 @@ class Player {
     }
 
     //setters
+    fold() {
+        this.hasfolded = true;
+    }
     addStack(value) {
         this.stack += value
     }
@@ -19,8 +22,8 @@ class Player {
             this.hole_cards.push(card)
     }
     //getters
-    getName() {
-        return this.name
+    getID() {
+        return this.id
     }
     getStack() {
         return this.stack
