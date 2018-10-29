@@ -53,9 +53,14 @@ io.on('connection', (socket) => {
     socket.emit('send_data', data)
 
    
-    if(socketEngine.getConnected().length > 1) { //2 players, lets start the game
+    if(socketEngine.getConnectedLength()> 1) { //2 players, lets start the game
         console.log("Starting game")
         game.start()
+        var data = {
+            players: game.getTable().getPlayers(),
+            my_player: game.getTable().getPlayer(socket.id)
+        }
+        socketEngine.broadcast("send_data", data)
     }
 
     socket.on('disconnect', (msg) => {
