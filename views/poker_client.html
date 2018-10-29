@@ -16,14 +16,14 @@
 
 <script>
 
-    //TODO ON SCREEN RESIZE FUNCTION RESET SCALE VARS TO NEW WIDTH./HEIGHT
+    //TODO CLASS STRUCTURE FRONT END (is necessary)
     var socket = io();
     var table
     var players = []
 
     socket.on('send_data', function (data) {
         console.log(data)
-        //console.log('received ' + server_ball_array[0].y )
+
         table = data.table
         players = data.players
         my_player = data.my_player
@@ -43,20 +43,19 @@
     function loadCards() {
         //in lumps of 13, order is: A-K 
         //DIAMONDS 0-12 
-        //HEARTS 13-26
-        //SPADES 27-40
-        //CLUBS 40-53
+        //HEARTS 13-25
+        //SPADES 26-38
+        //CLUBS 39-51
         card_image_arr.push(loadImage("ass/cards/green_back.png"))
         for (var i = 1; i < 53; i++) {
             card_image_arr.push(loadImage("ass/cards/card" + i + ".png"))
         }
-
     }
+
     function setup() {
         createCanvas(window.innerWidth, window.innerHeight)
         bg = loadImage("ass/background.jpg")
         table_img = loadImage("ass/tableimg.png");
-        console.log('i eat shit')
         loadCards()
     }
     function drawTable() {
@@ -78,12 +77,11 @@
         drawPlayers()
 
     }
-    function windowResized() {
-        console.log("REISE")
+    function windowResized() { //auto called when resize browser
         resizeCanvas(windowWidth, windowHeight);
         initScales()
-
     }
+
     function drawHoleCards() {
         for (var i = 0; i < players.length; i++) {
             for (var j = 0; j < players.hole_cards.length; j++) {

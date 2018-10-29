@@ -44,6 +44,7 @@ io.on('connection', (socket) => {
 
     socketEngine.getConnected()[socket.id] = socket
     game.table.addPlayer(socket.id)
+    game.getRound().preflop()
     var data = {
         players: game.getTable().getPlayers(),
         my_player: game.getTable().getPlayer(socket.id)
