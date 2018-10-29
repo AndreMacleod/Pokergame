@@ -18,5 +18,12 @@ class SocketEngine {
     getConnected() {
         return this.connected
     }
+    getConnectedLength() {
+       return Object.keys(this.connected).length
+    }
+    addConnection(socket) {
+        this.connected[socket.id] = socket 
+    }
+    
 }
 module.exports = SocketEngine;

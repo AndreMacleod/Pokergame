@@ -36,24 +36,32 @@ states = ['PREFLOP', 'FLOP', 'TURN', 'RIVER']
 //NEW GAME STARTED
 var socketEngine = new SocketEngine(io)
 var game = new Game(socketEngine) //new game
-game.start()
+
 
 
 io.on('connection', (socket) => {
     console.log("a user connected")
-
-    socketEngine.getConnected()[socket.id] = socket
+    console.log(socketEngine.getConnectedLength())
+    socketEngine.addConnection(socket)
+    console.log(socketEngine.getConnectedLength())
     game.table.addPlayer(socket.id)
-    game.getRound().preflop()
+    
     var data = {
         players: game.getTable().getPlayers(),
         my_player: game.getTable().getPlayer(socket.id)
     }
     socket.emit('send_data', data)
 
+   
+    if(socketEngine.getConnected().length > 1) { //2 players, lets start the game
+        console.log("Starting game")
+        game.start()
+    }
+
     socket.on('disconnect', (msg) => {
         socketEngine.connected[socket.id] = null
     });
+   
 })
 
 module.exports = this
