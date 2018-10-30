@@ -18,7 +18,7 @@ class Table {
     }
     addPlayer(id) {
         this.players.push(new Player(id))
-        console.log(this.players)
+        //console.log(this.players)
        
     }
     getPlayer(id) {

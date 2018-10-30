@@ -22,7 +22,7 @@
     var players = []
     var my_player 
     socket.on('send_data', function (data) {
-        console.log(data)
+        
 
         table = data.table
         players = data.players
@@ -112,7 +112,7 @@
                 
 
                 if(players[i].id == my_player.id){
-                    console.log(my_player.hole_cards[j])
+                    //console.log(my_player.hole_cards[j])
                     image(card_image_arr[13 * x + my_player.hole_cards[j].number], window.innerWidth / 2 + card_scale / 2 * j, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * table_scale * i * 3 / 4, card_scale, card_scale * 1.25)
                 } else {
                     image(card_image_arr[0], window.innerWidth / 2 + card_scale / 2 * j, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * table_scale * i * 3 / 4, card_scale, card_scale * 1.25)

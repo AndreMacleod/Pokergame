@@ -15,7 +15,7 @@ class Round {
 
         if (this.state == states[0]) { //PREFLOP
             this.preflop()
-            console.log(this.players)
+            //console.log(this.players)
             this.getBets()
           //  this.nextState()
         }

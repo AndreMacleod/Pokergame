@@ -5,7 +5,7 @@ class SocketEngine {
 
     }
     emit(path, data, socket_id) {
-        connected[socket_id].emit(path, data) //scope socket
+        this.connected[socket_id].emit(path, data) //scope socket
 
     }
     broadcast(path, data) {

@@ -55,24 +55,28 @@ function obfuscatePlayerCards() {
 io.on('connection', (socket) => {
     socketEngine.addConnection(socket)
     game.table.addPlayer(socket.id)
-
+    console.log("added player " + socket.id)
 
     var data = {
         players: obfuscatePlayerCards(),
         my_player: game.getTable().getPlayer(socket.id)
     }
-    socketEngine.emit('send_data', data)
+    socket.emit('send_data', data)
 
-
+    console.log(socketEngine.getConnectedLength() + " players connected")
     if (socketEngine.getConnectedLength() > 1) { //2 players, lets start the game
         console.log("Starting game")
         game.start()
-
-        var data = {
-            players: obfuscatePlayerCards(),
-            my_player: game.getTable().getPlayer(socket.id)
-        }
-        socketEngine.broadcast("send_data", data)
+        var obf = obfuscatePlayerCards()
+for(var i=0;i<game.getTable().getPlayers().length;i++) {
+    var data = {
+        players: obf,
+        my_player: game.getTable().getPlayers()[i]
+    }
+    socketEngine.emit("send_data", data,game.getTable().getPlayers()[i].id)
+  
+}
+       
     }
 
     socket.on('disconnect', (msg) => {
