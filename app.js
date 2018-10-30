@@ -61,20 +61,12 @@ io.on('connection', (socket) => {
         players: obfuscatePlayerCards(),
         my_player: game.getTable().getPlayer(socket.id)
     }
-    socket.emit('send_data', data)
+    socketEngine.emit('send_data', data)
 
 
     if (socketEngine.getConnectedLength() > 1) { //2 players, lets start the game
         console.log("Starting game")
         game.start()
-        console.log("obf")
-        for (var i = 0; i < game.getTable().getPlayers().length; i++) {
-            console.log(obfuscatePlayerCards()[i])
-        }
-        console.log("real")
-        for (var i = 0; i < game.getTable().getPlayers().length; i++) {
-            console.log(game.getTable().getPlayers()[i].getHoleCards())
-        }
 
         var data = {
             players: obfuscatePlayerCards(),
