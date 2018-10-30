@@ -6,7 +6,6 @@ class SocketEngine {
     }
     emit(path, data, socket_id) {
         this.connected[socket_id].emit(path, data) //scope socket
-
     }
     broadcast(path, data) {
         this.io.sockets.emit(path, data)

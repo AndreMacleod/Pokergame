@@ -14,6 +14,12 @@ class Table {
         this.players.push(new Player(id,this.starting_stack))
         //console.log(this.players)
 
+    } 
+    removePlayer(id) {
+        for (var i = 0; i < this.players.length; i++) {
+            if (this.players[i].id == id)
+                return this.players.splice(this.players[i],1)
+        }
     }
     getPlayer(id) {
         for (var i = 0; i < this.players.length; i++) {
@@ -22,7 +28,6 @@ class Table {
         }
     }
     getPlayers() {
-
         return this.players
     }
 }

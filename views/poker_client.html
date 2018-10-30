@@ -20,9 +20,9 @@
     var socket = io();
     var table
     var players = []
-    var my_player 
+    var my_player
     socket.on('send_data', function (data) {
-        
+
 
         table = data.table
         players = data.players
@@ -35,7 +35,7 @@
     var table_scale = (window.innerWidth + window.innerHeight / 2) / 550
     var card_scale = (window.innerWidth + window.innerHeight / 2) / 25
     var card_image_arr = []
-   
+
 
     function initScales() {
         table_scale = (window.innerWidth + window.innerHeight / 2) / 550
@@ -85,39 +85,34 @@
     }
 
     function drawHoleCards() {
-        
-        if(my_player == null){
-            return 
-        }
-        if(my_player.hole_cards.length == 0 || my_player.hole_cards == null ){
-            return
-        }
-    
-        for (var i = 0; i < players.length; i++) {
 
+
+
+        for (var i = 0; i < players.length; i++) {
             for (var j = 0; j < players[i].hole_cards.length; j++) {
                 var x = 0
-                if (my_player.hole_cards[j].suit == 'HEARTS') {
-                    var x = 0
+                if (my_player != null) {
+                    if (my_player.hole_cards[j].suit == 'HEARTS') {
+                        x = 0
+                    }
+                    if (my_player.hole_cards[j].suit == 'DIAMONDS') {
+                        x = 1
+                    }
+                    if (my_player.hole_cards[j].suit == 'SPADES') {
+                        x = 2
+                    }
+                    if (my_player.hole_cards[j].suit == 'CLUBS') {
+                        x = 3
+                    }
                 }
-                if (my_player.hole_cards[j].suit == 'DIAMONDS') {
-                    var x = 1
-                }
-                if (my_player.hole_cards[j].suit == 'SPADES') {
-                    var x = 2
-                }
-                if (my_player.hole_cards[j].suit == 'CLUBS') {
-                    var x = 3
-                }
-                
 
-                if(players[i].id == my_player.id){
+                if (my_player != null && players[i].id == my_player.id && my_player.hole_cards.length > 0) {
                     //console.log(my_player.hole_cards[j])
                     image(card_image_arr[13 * x + my_player.hole_cards[j].number], window.innerWidth / 2 + card_scale / 2 * j, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * table_scale * i * 3 / 4, card_scale, card_scale * 1.25)
                 } else {
                     image(card_image_arr[0], window.innerWidth / 2 + card_scale / 2 * j, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * table_scale * i * 3 / 4, card_scale, card_scale * 1.25)
-                }        
-                
+                }
+
 
                 //console.log(13 * x + my_player.hole_cards[j].number)               
 
