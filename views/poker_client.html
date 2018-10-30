@@ -58,6 +58,8 @@
         bg = loadImage("ass/background.jpg")
         table_img = loadImage("ass/tableimg.png");
         card_img = loadImage("ass/cards/card0.png")
+        torterror = loadImage("ass/torterror.jpg");
+        gabriel = loadImage("ass/garbriel.png");
         loadCards()
     }
     function drawTable() {
@@ -66,9 +68,10 @@
         }
     }
     function drawPlayers() {
-        for (var i = 0; i < players.length; i++) {
+        /*for (var i = 0; i < players.length; i++) {
             ellipse(window.innerWidth / 2, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * table_scale * i, 60, 60)
-        }
+        }*/
+        image(torterror, )
     }
     function draw() {
         //drawtable()
@@ -78,10 +81,15 @@
         drawTable()
         //drawPlayers()
         drawHoleCards()
+        drawDeck()
     }
     function windowResized() { //auto called when resize browser
         resizeCanvas(windowWidth, windowHeight);
         initScales()
+    }
+
+    function drawDeck(){
+        image(card_image_arr[0], window.innerWidth / 2 - table_img.width / 2 * (table_scale), window.innerWidth / 2, card_scale, card_scale * 1.25)
     }
 
     function drawHoleCards() {
