@@ -2,7 +2,7 @@ const Table = require('./Table.js')
 const Round = require('./Round.js')
 class Game {
     constructor(socketEngine) { //sets up table
-        this.table = new Table(2, socketEngine) //x players
+        this.table = new Table(2, 10000, socketEngine) //x players
         this.round = null
         this.socketEngine = socketEngine
 
@@ -10,7 +10,7 @@ class Game {
     start() { //begins the game.
         this.newRound()
     }
-    
+
     newRound() {
         console.log("you started a round")
         if (this.round == null) {

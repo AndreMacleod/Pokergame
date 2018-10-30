@@ -1,25 +1,19 @@
 const Player = require('./Player.js')
 class Table {
-    constructor(player_num,socketEngine) {
+    constructor(player_num, starting_stack, socketEngine) {
         this.player_num = player_num
         //this.players = this.generatePlayers();
         this.players = []
+        this.starting_stack = starting_stack
         this.socketEngine = socketEngine
-       // this.socketEngine.listen()
+        // this.socketEngine.listen()
     }
     //gen funcs
 
-    generatePlayers() {
-        var temp = []
-        for (var i = 0; i < this.player_num; i++) {
-            temp.push(new Player("Player " + i)) //new player 1,2 etc..
-        }
-        return temp;
-    }
     addPlayer(id) {
-        this.players.push(new Player(id))
+        this.players.push(new Player(id,this.starting_stack))
         //console.log(this.players)
-       
+
     }
     getPlayer(id) {
         for (var i = 0; i < this.players.length; i++) {
@@ -28,7 +22,7 @@ class Table {
         }
     }
     getPlayers() {
-       
+
         return this.players
     }
 }
