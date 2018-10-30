@@ -20,7 +20,7 @@
     var socket = io();
     var table
     var players = []
-
+    var my_player 
     socket.on('send_data', function (data) {
         console.log(data)
 
@@ -35,6 +35,7 @@
     var table_scale = (window.innerWidth + window.innerHeight / 2) / 550
     var card_scale = (window.innerWidth + window.innerHeight / 2) / 25
     var card_image_arr = []
+   
 
     function initScales() {
         table_scale = (window.innerWidth + window.innerHeight / 2) / 550
@@ -84,7 +85,14 @@
     }
 
     function drawHoleCards() {
-
+        
+        if(my_player == null){
+            return 
+        }
+        if(my_player.hole_cards.length == 0 || my_player.hole_cards == null ){
+            return
+        }
+    
         for (var i = 0; i < players.length; i++) {
 
             for (var j = 0; j < players[i].hole_cards.length; j++) {
