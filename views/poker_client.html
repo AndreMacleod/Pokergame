@@ -42,8 +42,8 @@
     }
     function loadCards() {
         //in lumps of 13, order is: A-K 
-        //DIAMONDS 0-12 
-        //HEARTS 13-25
+        //HEARTS 0-12 
+        //DIAMONDS 13-25
         //SPADES 26-38
         //CLUBS 39-51
         card_image_arr.push(loadImage("ass/cards/green_back.png"))
@@ -56,6 +56,7 @@
         createCanvas(window.innerWidth, window.innerHeight)
         bg = loadImage("ass/background.jpg")
         table_img = loadImage("ass/tableimg.png");
+        card_img = loadImage("ass/cards/card0.png")
         loadCards()
     }
     function drawTable() {
@@ -75,7 +76,7 @@
 
         drawTable()
         drawPlayers()
-
+        drawHoleCards()
     }
     function windowResized() { //auto called when resize browser
         resizeCanvas(windowWidth, windowHeight);
@@ -83,8 +84,27 @@
     }
 
     function drawHoleCards() {
+
         for (var i = 0; i < players.length; i++) {
-            for (var j = 0; j < players.hole_cards.length; j++) {
+
+            for (var j = 0; j < my_player.hole_cards.length; j++) {
+                var x = 0
+                if (my_player.hole_cards[j].suit == 'HEARTS') {
+                    var x = 0
+                }
+                if (my_player.hole_cards[j].suit == 'DIAMONDS') {
+                    var x = 1
+                }
+                if (my_player.hole_cards[j].suit == 'SPADES') {
+                    var x = 2
+                }
+                if (my_player.hole_cards[j].suit == 'CLUBS') {
+                    var x = 3
+                }
+
+                image(card_image_arr[13 * x + my_player.hole_cards[j].number - 1], window.innerWidth / 2 + card_scale * 3 / 2 * j, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * table_scale * i * 3 / 4, card_scale, card_scale * 1.25)
+
+                //console.log(13 * x + my_player.hole_cards[j].number)               
 
             }
         }
