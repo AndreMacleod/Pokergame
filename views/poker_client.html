@@ -47,7 +47,7 @@
         //SPADES 26-38
         //CLUBS 39-51
         card_image_arr.push(loadImage("ass/cards/green_back.png"))
-        for (var i = 1; i < 53; i++) {
+        for (var i = 0; i < 52; i++) {
             card_image_arr.push(loadImage("ass/cards/card" + i + ".png"))
         }
     }
@@ -75,7 +75,7 @@
         image(card_image_arr[0], 50, 50, card_scale, card_scale * 1.25)
 
         drawTable()
-        drawPlayers()
+        //drawPlayers()
         drawHoleCards()
     }
     function windowResized() { //auto called when resize browser
@@ -87,7 +87,7 @@
 
         for (var i = 0; i < players.length; i++) {
 
-            for (var j = 0; j < my_player.hole_cards.length; j++) {
+            for (var j = 0; j < players[i].hole_cards.length; j++) {
                 var x = 0
                 if (my_player.hole_cards[j].suit == 'HEARTS') {
                     var x = 0
@@ -101,8 +101,15 @@
                 if (my_player.hole_cards[j].suit == 'CLUBS') {
                     var x = 3
                 }
+                
 
-                image(card_image_arr[13 * x + my_player.hole_cards[j].number - 1], window.innerWidth / 2 + card_scale * 3 / 2 * j, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * table_scale * i * 3 / 4, card_scale, card_scale * 1.25)
+                if(players[i].id == my_player.id){
+                    console.log(my_player.hole_cards[j])
+                    image(card_image_arr[13 * x + my_player.hole_cards[j].number], window.innerWidth / 2 + card_scale / 2 * j, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * table_scale * i * 3 / 4, card_scale, card_scale * 1.25)
+                } else {
+                    image(card_image_arr[0], window.innerWidth / 2 + card_scale / 2 * j, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * table_scale * i * 3 / 4, card_scale, card_scale * 1.25)
+                }        
+                
 
                 //console.log(13 * x + my_player.hole_cards[j].number)               
 
