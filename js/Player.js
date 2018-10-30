@@ -1,7 +1,7 @@
 class Player {
     constructor(id,stack,blind_type,has_folded,hole_cards) {
         this.id = id;
-        this.stack = 0
+        this.stack = stack
         this.blind_type = null
         this.hole_cards = hole_cards || []
         this.has_folded = false;
