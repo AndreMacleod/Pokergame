@@ -58,30 +58,49 @@
         bg = loadImage("ass/background.jpg")
         table_img = loadImage("ass/tableimg.png");
         card_img = loadImage("ass/cards/card0.png")
+        torterror = loadImage("ass/torterror.jpg");
+        gabriel = loadImage("ass/garbriel.png");
         loadCards()
     }
+
+    function draw() {
+            //drawtable()
+            background(bg)
+
+            drawTable()
+            drawPlayers()
+            drawHoleCards()
+            drawDeck()
+            displayStack()
+        }
+    
+    function windowResized() { //auto called when resize browser
+            resizeCanvas(windowWidth, windowHeight);
+            initScales()
+        }
+
     function drawTable() {
-        if (table = ! null) {
+        if (table = ! null){
             image(table_img, window.innerWidth / 2 - table_img.width * table_scale / 2, window.innerHeight / 2 - table_img.height * (table_scale / 2) * 3 / 2, table_img.width * table_scale, table_img.height * table_scale * 3 / 2);
         }
     }
     function drawPlayers() {
-        for (var i = 0; i < players.length; i++) {
+        /*for (var i = 0; i < players.length; i++) {
             ellipse(window.innerWidth / 2, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * table_scale * i, 60, 60)
+        }*/
+        image(torterror, window.innerWidth / 2 - 110, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * 3 / 4 * table_scale, 100, 100)
+        image(gabriel, window.innerWidth / 2 - 110, window.innerHeight / 2 - table_img.height * (table_scale / 2), 100, 100)
+    }
+    function displayStack() {
+        for (var i = 0; i < players.length; i++) {
+            textSize(32)
+    
+            text(players[i].stack, window.innerWidth * 3 / 5, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * table_scale * i * 3 / 4, 200, 200)
         }
     }
-    function draw() {
-        //drawtable()
-        background(bg)
-        image(card_image_arr[0], 50, 50, card_scale, card_scale * 1.25)
 
-        drawTable()
-        //drawPlayers()
-        drawHoleCards()
-    }
-    function windowResized() { //auto called when resize browser
-        resizeCanvas(windowWidth, windowHeight);
-        initScales()
+    function drawDeck() {
+        image(card_image_arr[0], window.innerWidth / 2 - table_img.width * (table_scale) / 4, window.innerHeight / 2, card_scale, card_scale * 1.25)
     }
 
     function drawHoleCards() {
@@ -118,5 +137,6 @@
 
             }
         }
+    
     }
 </script>
