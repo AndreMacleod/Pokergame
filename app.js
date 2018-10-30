@@ -38,13 +38,19 @@ var socketEngine = new SocketEngine(io)
 var game = new Game(socketEngine) //new game
 
 
-
+function obfuscatePlayerCards() {
+    var players = game.getTable().getPlayers()
+    for(var i=0;i< players.length;i++) {
+        //console.log(players[i].hidePlayerCards())
+        players[i].hole_cards = players[i].hidePlayerCards()
+    }
+    return players
+}
 io.on('connection', (socket) => {
     socketEngine.addConnection(socket)
     game.table.addPlayer(socket.id)
-    
     var data = {
-        players: game.getTable().getPlayers(),
+        players: obfuscatePlayerCards(),
         my_player: game.getTable().getPlayer(socket.id)
     }
     socket.emit('send_data', data)
@@ -53,8 +59,9 @@ io.on('connection', (socket) => {
     if(socketEngine.getConnectedLength()> 1) { //2 players, lets start the game
         console.log("Starting game") 
         game.start()
+        console.log(obfuscatePlayerCards())
         var data = {
-            players: game.getTable().getPlayers(),
+            players:  obfuscatePlayerCards(),
             my_player: game.getTable().getPlayer(socket.id)
         }
         socketEngine.broadcast("send_data", data)

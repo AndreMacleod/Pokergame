@@ -37,5 +37,13 @@ class Player {
     getFoldedState() {
         return this.has_folded
     }
+    hidePlayerCards() {
+     var hole_ref = this.hole_cards;
+     for(var i=0;i<hole_ref.length;i++){
+     hole_ref[i].suit = "HIDDEN"
+     hole_ref[i].number = "HIDDEN"
+     }
+     return hole_ref
+    }
 }
 module.exports = Player
