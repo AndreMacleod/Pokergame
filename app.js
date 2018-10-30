@@ -91,3 +91,18 @@ io.on('connection', (socket) => {
 })
 
 module.exports = this
+
+
+// GAME LOGIC
+//SETS
+
+/*PLAYER_CARD_ARRAY = COMMUNITY + hole_cards
+j=1
+for(i=0; i+j<player_card_array.length; i++){
+    if(player_card_array[i].number == player_card_array[i+j].number){
+        return true
+    } else {
+        j++
+    }
+
+}*/
