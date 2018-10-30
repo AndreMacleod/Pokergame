@@ -40,10 +40,7 @@ var game = new Game(socketEngine) //new game
 
 
 io.on('connection', (socket) => {
-    console.log("a user connected")
-    console.log(socketEngine.getConnectedLength())
     socketEngine.addConnection(socket)
-    console.log(socketEngine.getConnectedLength())
     game.table.addPlayer(socket.id)
     
     var data = {
@@ -54,7 +51,7 @@ io.on('connection', (socket) => {
 
    
     if(socketEngine.getConnectedLength()> 1) { //2 players, lets start the game
-        console.log("Starting game")
+        console.log("Starting game") 
         game.start()
         var data = {
             players: game.getTable().getPlayers(),
@@ -65,6 +62,7 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', (msg) => {
         socketEngine.connected[socket.id] = null
+        game.cancelRound() 
     });
    
 })

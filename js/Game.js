@@ -12,7 +12,7 @@ class Game {
     }
     
     newRound() {
-        console.log("you started a game")
+        console.log("you started a round")
         if (this.round == null) {
             this.round = new Round(this, this.socketEngine) //PASS GAME to round to recursively call
             this.round.start()
@@ -22,6 +22,9 @@ class Game {
     //getters
     getTable() {
         return this.table
+    }
+    cancelRound() {
+        this.round = null;
     }
     getRound() {
         return this.round
