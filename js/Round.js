@@ -23,7 +23,11 @@ class Round {
         //this.game.newRound()
     }
     getBets() {
+        var data = {
+            options:["FOLD","BET","CHECK"]
+        }
         for (var i = 0; i < this.players.length; i++) {
+            //this.socketEngine.emit("bet_options")
             //ask each player options
             //options go in player class,like player.fold, .bet ..
         }

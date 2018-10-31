@@ -1,8 +1,8 @@
 const Table = require('./Table.js')
 const Round = require('./Round.js')
 class Game {
-    constructor(socketEngine) { //sets up table
-        this.table = new Table(2, 10000, socketEngine) //x players
+    constructor(table_max, socketEngine) { //sets up table
+        this.table = new Table(2, 10000, table_max, socketEngine) //x players
         this.round = null
         this.socketEngine = socketEngine
 
