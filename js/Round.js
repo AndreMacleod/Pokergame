@@ -125,7 +125,7 @@ class Round {
         if (this.isRoundOver()) { //round is over get winner and give them chips
             console.log("starting a new round SINCE WINNER ")
             this.getWinner().addStack(this.getPot())
-            this.game.newRound()
+           return this.game.newRound()
 
         }
         console.log("index " + this.player_index)
