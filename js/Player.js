@@ -9,7 +9,7 @@ class Player {
 
     //setters
     fold() {
-        this.hasfolded = true;
+        this.has_folded = true;
     }
     addStack(value) {
         this.stack += value
@@ -27,6 +27,12 @@ class Player {
     }
     getStack() {
         return this.stack
+    }
+    isBetValid(value) {
+        if(value > this.stack) {
+            return false
+        }
+        return true
     }
     getBlindType() {
         return this.blind_type

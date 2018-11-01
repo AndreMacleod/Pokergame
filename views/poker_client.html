@@ -22,6 +22,7 @@
     var table
     var players = []
     var my_player
+    var community_cards = []
     socket.on('send_data', function (data) {
 
 
@@ -30,13 +31,61 @@
         my_player = data.my_player
         console.log(my_player)
     })
+    socket.on('send_actions', function (actions) {
+        console.log("was sent actions by server")
+        display_action_bar = true
 
+    })
+    socket.on("community_cards", function (data) {
+        console.log("was sent community cards")
+        console.log(data.community_cards)
+        community_cards = data.community_cards
+    })
+    function submitAction(action, bet_amount) {
+
+        var data = {
+            action: action,
+            bet_amount: bet_amount
+        }
+        console.log("sending action " + action + " to server")
+
+        socket.emit('choose_action', data)
+        display_action_bar = false;
+    }
+    function fold() {
+        submitAction("FOLD", null)
+    }
+    function check() {
+        submitAction("CHECK", null)
+    }
+    function bet() {
+        submitAction("BET", 1000)
+    }
     var bg
     var table_img
     var table_scale = (window.innerWidth + window.innerHeight / 2) / 550
     var card_scale = (window.innerWidth + window.innerHeight / 2) / 25
     var card_image_arr = []
+    var display_action_bar = false;
 
+    var fold_button = {
+        w: 100,
+        h: 100,
+        x: 50,
+        y: 50
+    }
+    var check_button = {
+        w: 100,
+        h: 100,
+        x: 180,
+        y: 50
+    }
+    var bet_button = {
+        w: 100,
+        h: 100,
+        x: 300,
+        y: 50
+    }
 
     function initScales() {
         table_scale = (window.innerWidth + window.innerHeight / 2) / 550
@@ -61,6 +110,7 @@
         card_img = loadImage("ass/cards/card0.png")
         torterror = loadImage("ass/torterror.jpg");
         gabriel = loadImage("ass/garbriel.png");
+
         loadCards()
     }
 
@@ -73,8 +123,40 @@
         drawHoleCards()
         drawDeck()
         displayStack()
+        drawCommunityCards()
+        if (display_action_bar == true) {
+            drawActionBar()
+        }
     }
+    function drawActionBar() {
+        ellipse(fold_button.x, fold_button.y, fold_button.w, fold_button.h)
+        ellipse(check_button.x, check_button.y, check_button.w, check_button.h)
+        ellipse(bet_button.x, bet_button.y, bet_button.w, bet_button.h)
+    }
+    function isButtonClicked(btn_x, btn_y, btn_w, btn_h) {
+        if (mouseX >= btn_x && mouseX <= btn_x + btn_w) {
+            if (mouseY > btn_y && mouseY <= btn_y + btn_h)
+                return true;
+        }
+    }
+    function mousePressed() {
+        var clicked_fold = isButtonClicked(fold_button.x, fold_button.y, fold_button.w, fold_button.h);
 
+        if (clicked_fold) {
+            return fold()
+        }
+        var clicked_check = isButtonClicked(check_button.x, check_button.y, check_button.w, check_button.h);
+
+        if (clicked_check) {
+
+            return check()
+        }
+        var clicked_bet = isButtonClicked(bet_button.x, bet_button.y, bet_button.w, bet_button.h);
+
+        if (clicked_bet) {
+            return bet()
+        }
+    }
     function windowResized() { //auto called when resize browser
         resizeCanvas(windowWidth, windowHeight);
         initScales()
@@ -101,29 +183,42 @@
     }
 
     function drawDeck() {
-        image(card_image_arr[0], window.innerWidth / 2 - table_img.width * (table_scale) / 4, window.innerHeight / 2, card_scale, card_scale * 1.25)
+        image(card_image_arr[0], window.innerWidth / 2 - table_img.width * (table_scale) / 4, window.innerHeight / 2 - 20, card_scale, card_scale * 1.25)
     }
 
-    function drawHoleCards() {
+    function getSuitIndex(card) {
 
+        if (card.suit == 'HEARTS') {
+            x = 0
+        }
+        if (card.suit == 'DIAMONDS') {
+            x = 1
+        }
+        if (card.suit == 'SPADES') {
+            x = 2
+        }
+        if (card.suit == 'CLUBS') {
+            x = 3
+        }
+        return x;
+    }
+    function drawCommunityCards() {
+        for (var i = 0; i < community_cards.length; i++) {
+            var x = 0
+
+          var x = getSuitIndex(community_cards[i])
+            image(card_image_arr[13 * x + community_cards[i].number], (window.innerWidth / 2 - table_img.width * (table_scale) / 4 )+ 50*(i+1), window.innerHeight / 2 - 20, card_scale, card_scale * 1.25)
+        }
+    }
+    function drawHoleCards() {
 
 
         for (var i = 0; i < players.length; i++) {
             for (var j = 0; j < players[i].hole_cards.length; j++) {
                 var x = 0
                 if (my_player != null) {
-                    if (my_player.hole_cards[j].suit == 'HEARTS') {
-                        x = 0
-                    }
-                    if (my_player.hole_cards[j].suit == 'DIAMONDS') {
-                        x = 1
-                    }
-                    if (my_player.hole_cards[j].suit == 'SPADES') {
-                        x = 2
-                    }
-                    if (my_player.hole_cards[j].suit == 'CLUBS') {
-                        x = 3
-                    }
+                    x = getSuitIndex(my_player.hole_cards[j])
+
                 }
 
                 if (my_player != null && players[i].id == my_player.id && my_player.hole_cards.length > 0) {
@@ -146,7 +241,7 @@
 <script>
 
 
-    player_card_array = [{ suit: "SPADES", number: 2 }, { suit: "SPADES", number: 1 }, { suit: "SPADES", number: 3 }, { suit: "SPADES", number: 4 }, { suit: "SPADES", number: 5 }, { suit: "CLUBS", number: 4 }, { suit: "CLUBS", number: 10 }]
+    player_card_array = [{ suit: "SPADES", number: 2 }, { suit: "SPADES", number: 14 }, { suit: "SPADES", number: 3 }, { suit: "SPADES", number: 4 }, { suit: "SPADES", number: 5 }, { suit: "CLUBS", number: 6 }, { suit: "CLUBS", number: 10 }]
     var matching_cards_array = []
     var flush_cards_array = []
     var flush_cards = []
@@ -220,6 +315,8 @@
     if (straight_array.length > 1) {
         console.log("straight_time " + straight_array)
     }
-
+    if (number_array[number_array.length - 1] == 14 && straight_array.length == 1 && straight_array[0] == 5){
+        console.log('wheel straight')
+    }
 
 </script>
