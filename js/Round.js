@@ -74,9 +74,11 @@ class Round {
             if (this.players[this.player_index].isBetValid(bet_amount)) {
                 this.players[this.player_index].subtractStack(bet_amount) //remove from player
                 this.addToPot(bet_amount) //add to pot
+                console.log("Remaining stack " + this.players[this.player_index].getStack())
             }
         }
         console.log("pot is " + this.pot)
+        this.resendData()
         this.goNextPlayer()
     }
     getActions() {
@@ -87,7 +89,19 @@ class Round {
         console.log("emitting actions to id " + this.players[this.player_index].id)
         this.socketEngine.emit("send_actions", data, this.players[this.player_index].id)
     }
-
+    resendData() {
+        var deck_array = this.deck.getDeck()
+        var obf = this.obfuscatePlayerCards()
+        for (var i = 0; i < this.players.length; i++) {
+    
+         
+            var new_data = {
+                players: obf,
+                my_player: this.players[i]
+            }
+            this.socketEngine.emit("send_data", new_data, this.players[i].id)
+        }
+    }
     preflop() { //give hole cards
         //deal 2 cardsv
 
@@ -125,7 +139,7 @@ class Round {
         if (this.isRoundOver()) { //round is over get winner and give them chips
             console.log("starting a new round SINCE WINNER ")
             this.getWinner().addStack(this.getPot())
-           return this.game.newRound()
+            return this.game.newRound()
 
         }
         console.log("index " + this.player_index)
@@ -139,6 +153,8 @@ class Round {
             console.log(this.nextState())
             this.stateAction() //finished iterating players so go next state
         }
+
+
     }
 
     getWinner() {

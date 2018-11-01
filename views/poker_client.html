@@ -148,17 +148,17 @@
     function mousePressed() {
         var clicked_fold = dist(mouseX, mouseY,fold_button.x, fold_button.y);
 
-        if (clicked_fold < fold_button.x/2) {
+        if (clicked_fold < fold_button.w/2) {
             return fold()
         }
         var clicked_check = dist(mouseX, mouseY,check_button.x, check_button.y);
 
-        if (clicked_check < check_button.x/2) {
+        if (clicked_check < check_button.w/2) {
             return check()
         }
-        var clicked_bet = isButtonClicked(bet_button.x, bet_button.y, bet_button.w, bet_button.h);
+        var clicked_bet = dist(mouseX, mouseY,bet_button.x, bet_button.y);
 
-        if (clicked_bet) {
+        if (clicked_bet < bet_button.w/2) {
             return bet()
         }
     }
