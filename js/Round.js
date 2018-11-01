@@ -20,6 +20,10 @@ class Round {
             //  this.nextState()
         } else if (this.state == states[1]) { //FLOP
             this.flop()
+            var data = {community_cards : this.community_cards}
+            for(var i =0;i<this.players.length;i++) {
+            this.socketEngine.emit("community_cards",data, this.players[i].id)
+            }
             console.log(this.community_cards)
         }
         this.getActions()

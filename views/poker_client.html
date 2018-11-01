@@ -21,6 +21,7 @@
     var table
     var players = []
     var my_player
+    var community_cards = []
     socket.on('send_data', function (data) {
 
 
@@ -33,6 +34,11 @@
         console.log("was sent actions by server")
         display_action_bar = true
 
+    })
+    socket.on("community_cards",function(data) {
+        console.log("was sent community cards")
+        console.log(data.community_cards)
+        community_cards = data.community_cards
     })
     function submitAction(action, bet_amount) {
 
@@ -116,6 +122,7 @@
         drawHoleCards()
         drawDeck()
         displayStack()
+        drawCommunityCards()
         if (display_action_bar == true) {
             drawActionBar()
         }
@@ -177,7 +184,26 @@
     function drawDeck() {
         image(card_image_arr[0], window.innerWidth / 2 - table_img.width * (table_scale) / 4, window.innerHeight / 2, card_scale, card_scale * 1.25)
     }
-
+    function drawCommunityCards() {
+        for (var i = 0; i < community_cards.length; i++) {
+                var x = 0
+                if (my_player != null) {
+                    if (community_cards[i].suit == 'HEARTS') {
+                        x = 0
+                    }
+                    if (community_cards[i].suit == 'DIAMONDS') {
+                        x = 1
+                    }
+                    if (community_cards[i].suit == 'SPADES') {
+                        x = 2
+                    }
+                    if (community_cards[i].suit == 'CLUBS') {
+                        x = 3
+                    }
+                }
+                image(card_image_arr[13 * x + community_cards[i].number], 50*i, 300,card_scale, card_scale * 1.25)
+    }
+}
     function drawHoleCards() {
 
 
@@ -197,6 +223,7 @@
                     if (my_player.hole_cards[j].suit == 'CLUBS') {
                         x = 3
                     }
+                 
                 }
 
                 if (my_player != null && players[i].id == my_player.id && my_player.hole_cards.length > 0) {
