@@ -71,15 +71,7 @@ io.on('connection', (socket) => {
         //full of players so lets start the game
         console.log("Starting game")
         games[games.length - 1].start()
-        var obf = obfuscatePlayerCards(games[games.length - 1])
-        for (var i = 0; i < games[games.length - 1].getTable().getPlayers().length; i++) {
-            var data = {
-                players: obf,
-                my_player: games[games.length - 1].getTable().getPlayers()[i]
-            }
-          
-            socketEngine.emit("send_data", data, games[games.length - 1].getTable().getPlayers()[i].id)
-        }
+       
     }
 
 
@@ -93,7 +85,7 @@ io.on('connection', (socket) => {
         console.log("CHOSE ACTION")
         var myGame = getMyGame(socket.id)
         console.log("Selected action is " + data.action)
-        myGame.getRound().applyAction(data.action, data.bet_amount)
+        myGame.getRound().applyAction(data.action, data.bet_amount,socket.id)
 
     })
 

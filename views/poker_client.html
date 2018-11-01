@@ -34,7 +34,13 @@
     socket.on('send_actions', function (actions) {
         console.log("was sent actions by server")
         display_action_bar = true
+    
 
+    })
+    socket.on("reset_round",function(data) {
+        console.log("reset round")
+        display_action_bar = data.display_bar
+        community_cards = data.community_cards
     })
     socket.on("community_cards", function (data) {
         console.log("was sent community cards")
@@ -138,22 +144,22 @@
             if (mouseY > btn_y && mouseY <= btn_y + btn_h)
                 return true;
         }
+        return false
     }
     function mousePressed() {
-        var clicked_fold = isButtonClicked(fold_button.x, fold_button.y, fold_button.w, fold_button.h);
+        var clicked_fold = dist(mouseX, mouseY,fold_button.x, fold_button.y);
 
-        if (clicked_fold) {
+        if (clicked_fold < fold_button.w/2) {
             return fold()
         }
-        var clicked_check = isButtonClicked(check_button.x, check_button.y, check_button.w, check_button.h);
+        var clicked_check = dist(mouseX, mouseY,check_button.x, check_button.y);
 
-        if (clicked_check) {
-
+        if (clicked_check < check_button.w/2) {
             return check()
         }
-        var clicked_bet = isButtonClicked(bet_button.x, bet_button.y, bet_button.w, bet_button.h);
+        var clicked_bet = dist(mouseX, mouseY,bet_button.x, bet_button.y);
 
-        if (clicked_bet) {
+        if (clicked_bet < bet_button.w/2) {
             return bet()
         }
     }
@@ -216,7 +222,7 @@
         for (var i = 0; i < players.length; i++) {
             for (var j = 0; j < players[i].hole_cards.length; j++) {
                 var x = 0
-                if (my_player != null) {
+                if (my_player != null && my_player.hole_cards.length > 0) {
                     x = getSuitIndex(my_player.hole_cards[j])
 
                 }
