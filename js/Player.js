@@ -9,7 +9,7 @@ class Player {
 
     //setters
     fold() {
-        this.hasfolded = true;
+        this.has_folded = true;
     }
     addStack(value) {
         this.stack += value

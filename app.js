@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server)
-
+var uuid = require('uuid');
 const port = 3000
 
 const Game = require('./js/Game.js')
@@ -35,6 +35,7 @@ app.get('/', function (req, res) {
 //GLOBALS
 suits = ['HEARTS', 'DIAMONDS', 'SPADES', 'CLUBS']
 states = ['PREFLOP', 'FLOP', 'TURN', 'RIVER']
+global_actions = ["FOLD", "CHECK","BET"]
 var games = []
 //NEW GAME STARTED
 var socketEngine = new SocketEngine(io)
@@ -43,40 +44,40 @@ var socketEngine = new SocketEngine(io)
 io.on('connection', (socket) => {
     socketEngine.addConnection(socket)
     var added = false;
-
+    var ref_id
     for (var i = 0; i < games.length; i++) {
         if (games[i].getTable().getPlayers().length < games[i].getTable().getSeatLimit()) {
             console.log("added player to table " + i)
             added = true
+            games[i].addConnection(socket.id)
+            console.log(games[i].getConnected())
             games[i].getTable().addPlayer(socket.id)
             console.log("table now has " + games[i].getTable().getPlayers().length)
-            console.log("max is "+ games[i].getTable().getSeatLimit())
+            console.log("max is " + games[i].getTable().getSeatLimit())
             break;
-        
         }
     }
-  
+
     if (!added) {
         var newGame = new Game(2, socketEngine)
         newGame.getTable().addPlayer(socket.id)
+        newGame.addConnection(socket.id)
+        //ref_id = uuid.v1()
         games.push(newGame)
-        console.log(newGame.getTable().getPlayers())
         console.log("no games available so created new game.")
     }
-    console.log(games[games.length-1].getTable().getPlayers().length )
-    console.log("VS")
-    console.log(games[games.length-1].getTable().getSeatLimit())
-    if(games[games.length-1].getTable().getPlayers().length == games[games.length-1].getTable().getSeatLimit()) {
+
+    if (games[games.length - 1].getTable().getPlayers().length == games[games.length - 1].getTable().getSeatLimit()) {
         //full of players so lets start the game
         console.log("Starting game")
-        games[games.length-1].start()
-        var obf = obfuscatePlayerCards(games[games.length-1])
-        for (var i = 0; i < games[games.length-1].getTable().getPlayers().length; i++) {
+        games[games.length - 1].start()
+        var obf = obfuscatePlayerCards(games[games.length - 1])
+        for (var i = 0; i < games[games.length - 1].getTable().getPlayers().length; i++) {
             var data = {
                 players: obf,
-                my_player: games[games.length-1].getTable().getPlayers()[i]
+                my_player: games[games.length - 1].getTable().getPlayers()[i]
             }
-            socketEngine.emit("send_data", data, games[games.length-1].getTable().getPlayers()[i].id)
+            socketEngine.emit("send_data", data, games[games.length - 1].getTable().getPlayers()[i].id)
         }
     }
 
@@ -87,7 +88,23 @@ io.on('connection', (socket) => {
         //  game.cancelRound()
     });
 
+    socket.on("chose_action", function (action) {
+
+        var myGame = getMyGame(socket.id)
+        console.log("Selected action is " + action)
+        myGame.getRound().applyAction(action, action.bet_amount)
+
+    })
+
 })
+function getMyGame(socket_id) {
+    for (var i = 0; i < games.length; i++) {
+        if (games[i].isConnected(socket_id)) {
+            return games[i]
+        }
+    }
+    return null
+}
 function obfuscatePlayerCards(game) {
     var players = game.getTable().getPlayers()
     arr = []

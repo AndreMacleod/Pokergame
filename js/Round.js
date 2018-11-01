@@ -10,30 +10,52 @@ class Round {
         this.players = this.game.getTable().getPlayers()
         console.log("new round started")
         this.deck.shuffle()
+        this.player_index = 0
     }
-    start() {
+    stateAction() {
 
         if (this.state == states[0]) { //PREFLOP
             this.preflop()
             //console.log(this.players)
-            this.getBets()
-          //  this.nextState()
+            //  this.nextState()
+        } else if (this.state == states[1]) { //FLOP
+            this.flop()
+            console.log(this.community_cards)
         }
+        this.getActions()
         //if round is over
         //this.game.newRound()
     }
-    getBets() {
-        var data = {
-            options:["FOLD","BET","CHECK"]
-        }
-        for (var i = 0; i < this.players.length; i++) {
-            //this.socketEngine.emit("bet_options")
-            //ask each player options
-            //options go in player class,like player.fold, .bet ..
-        }
-
+    flop() {
+        var deck_array = this.deck.getDeck()
+        this.community_cards.push(deck_array.shift())
+        this.community_cards.push(deck_array.shift())
+        this.community_cards.push(deck_array.shift())
     }
-   
+    applyAction(action, bet_amount) {
+        if (action == global_actions[0]) { //FOLD {}
+            this.players[this.player_index].fold()
+            console.log("player folded")
+
+        } else if (action == global_actions[1]) {//CHECK
+            console.log("checked")
+        } else if (action == global_actions[2]) { //BET
+            if (this.players[this.player_index].isBetValid(bet_amount)) {
+                this.players[this.player_index].subtractStack(value) //remove from player
+                this.addToPot(value) //add to pot
+            }
+        }
+        this.goNextPlayer()
+    }
+    getActions() {
+
+        var data = {
+            options: global_actions
+        }
+        console.log("emitting actions to id " + this.players[this.player_index].id)
+        this.socketEngine.emit("send_actions", data, this.players[this.player_index].id)
+    }
+
     preflop() { //give hole cards
         //deal 2 cardsv
         var deck_array = this.deck.getDeck()
@@ -42,9 +64,7 @@ class Round {
             this.players[i].giveHoleCard(deck_array.shift())
         }
     }
-    flop() {
-        
-    }
+
     //helpers
     nextState() {
         if (this.state == null) //if not yet init
@@ -56,7 +76,47 @@ class Round {
             }
         }
     }
+    addToPot(value) {
+        this.pot += value
+    }
 
+    goNextPlayer() {
+        if (this.isRoundOver()) { //round is over get winner and give them chips
+            this.getWinner().addStack(this.getPot())
+            this.game.newRound()
+            console.log("starting a new round SINCE WINNER ")
+        }
+        console.log("index " + this.player_index)
+        if (this.player_index < this.players.length - 1) {
+            console.log("going next player")
+            this.player_index++
+            this.getActions() // call get bets on next player
+        } else {
+            console.log("going next STATE")
+            console.log(this.nextState())
+            this.stateAction() //finished iterating players so go next state
+        }
+    }
+
+    getWinner() {
+        for (var i = 0; i < this.players.length; i++) {
+            if (this.players[i].getFoldedState() == false) {
+                return this.players[i]
+            }
+        }
+    }
+    isRoundOver() {
+        var not_folded = 0
+        for (var i = 0; i < this.players.length; i++) {
+            if (this.players[i].getFoldedState() == false) {
+                not_folded++
+            }
+        }
+        if (not_folded < 2) {//only one player left, must be winner
+            return true;
+        }
+        return null //more than 1
+    }
     getPot() {
         return this.pot
     }

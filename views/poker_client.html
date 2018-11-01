@@ -29,6 +29,12 @@
         my_player = data.my_player
         console.log(my_player)
     })
+    socket.on('send_actions', function (actions) {
+        console.log("EEE")
+        console.log(actions)
+        var action = "FOLD"
+        socket.emit('chose_action',action)
+    })
 
     var bg
     var table_img
