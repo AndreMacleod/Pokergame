@@ -215,7 +215,7 @@
         for (var i = 0; i < players.length; i++) {
             for (var j = 0; j < players[i].hole_cards.length; j++) {
                 var x = 0
-                if (my_player != null) {
+                if (my_player != null && my_player.hole_cards.length > 0) {
                     x = getSuitIndex(my_player.hole_cards[j])
 
                 }
