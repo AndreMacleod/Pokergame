@@ -35,7 +35,7 @@
         display_action_bar = true
 
     })
-    socket.on("community_cards",function(data) {
+    socket.on("community_cards", function (data) {
         console.log("was sent community cards")
         console.log(data.community_cards)
         community_cards = data.community_cards
@@ -68,22 +68,22 @@
     var display_action_bar = false;
 
     var fold_button = {
-        w:100,
-        h:100,
-        x:50,
-        y:50
+        w: 100,
+        h: 100,
+        x: 50,
+        y: 50
     }
     var check_button = {
-        w:100,
-        h:100,
-        x:180,
-        y:50
+        w: 100,
+        h: 100,
+        x: 180,
+        y: 50
     }
     var bet_button = {
-        w:100,
-        h:100,
-        x:300,
-        y:50
+        w: 100,
+        h: 100,
+        x: 300,
+        y: 50
     }
 
     function initScales() {
@@ -132,27 +132,27 @@
         ellipse(check_button.x, check_button.y, check_button.w, check_button.h)
         ellipse(bet_button.x, bet_button.y, bet_button.w, bet_button.h)
     }
-    function isButtonClicked(btn_x,btn_y,btn_w,btn_h) {
-        if(mouseX >= btn_x && mouseX <= btn_x + btn_w) {
-            if(mouseY > btn_y && mouseY <= btn_y + btn_h)
-            return true;
+    function isButtonClicked(btn_x, btn_y, btn_w, btn_h) {
+        if (mouseX >= btn_x && mouseX <= btn_x + btn_w) {
+            if (mouseY > btn_y && mouseY <= btn_y + btn_h)
+                return true;
         }
     }
     function mousePressed() {
         var clicked_fold = isButtonClicked(fold_button.x, fold_button.y, fold_button.w, fold_button.h);
-      
+
         if (clicked_fold) {
             return fold()
         }
         var clicked_check = isButtonClicked(check_button.x, check_button.y, check_button.w, check_button.h);
-       
+
         if (clicked_check) {
 
             return check()
         }
         var clicked_bet = isButtonClicked(bet_button.x, bet_button.y, bet_button.w, bet_button.h);
-       
-         if (clicked_bet) {
+
+        if (clicked_bet) {
             return bet()
         }
     }
@@ -184,26 +184,32 @@
     function drawDeck() {
         image(card_image_arr[0], window.innerWidth / 2 - table_img.width * (table_scale) / 4, window.innerHeight / 2, card_scale, card_scale * 1.25)
     }
+
+    function getSuitIndex(card) {
+
+        if (card.suit == 'HEARTS') {
+            x = 0
+        }
+        if (card.suit == 'DIAMONDS') {
+            x = 1
+        }
+        if (card.suit == 'SPADES') {
+            x = 2
+        }
+        if (card.suit == 'CLUBS') {
+            x = 3
+        }
+        return x;
+    }
     function drawCommunityCards() {
         for (var i = 0; i < community_cards.length; i++) {
-                var x = 0
-                if (my_player != null) {
-                    if (community_cards[i].suit == 'HEARTS') {
-                        x = 0
-                    }
-                    if (community_cards[i].suit == 'DIAMONDS') {
-                        x = 1
-                    }
-                    if (community_cards[i].suit == 'SPADES') {
-                        x = 2
-                    }
-                    if (community_cards[i].suit == 'CLUBS') {
-                        x = 3
-                    }
-                }
-                image(card_image_arr[13 * x + community_cards[i].number], 50*i, 300,card_scale, card_scale * 1.25)
+            var x = 0
+
+          var x = getSuitIndex(community_cards[i])
+
+            image(card_image_arr[13 * x + community_cards[i].number], 50 * i, 300, card_scale, card_scale * 1.25)
+        }
     }
-}
     function drawHoleCards() {
 
 
@@ -211,19 +217,8 @@
             for (var j = 0; j < players[i].hole_cards.length; j++) {
                 var x = 0
                 if (my_player != null) {
-                    if (my_player.hole_cards[j].suit == 'HEARTS') {
-                        x = 0
-                    }
-                    if (my_player.hole_cards[j].suit == 'DIAMONDS') {
-                        x = 1
-                    }
-                    if (my_player.hole_cards[j].suit == 'SPADES') {
-                        x = 2
-                    }
-                    if (my_player.hole_cards[j].suit == 'CLUBS') {
-                        x = 3
-                    }
-                 
+                    x = getSuitIndex(my_player.hole_cards[j])
+
                 }
 
                 if (my_player != null && players[i].id == my_player.id && my_player.hole_cards.length > 0) {
