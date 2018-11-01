@@ -33,7 +33,13 @@
     socket.on('send_actions', function (actions) {
         console.log("was sent actions by server")
         display_action_bar = true
+    
 
+    })
+    socket.on("reset_round",function(data) {
+        console.log("reset round")
+        display_action_bar = data.display_bar
+        community_cards = data.community_cards
     })
     socket.on("community_cards", function (data) {
         console.log("was sent community cards")

@@ -27,10 +27,7 @@ class Round {
         if (this.state == states[0]) { //PREFLOP
             console.log("going preflop")
             this.preflop()
-            var data = { community_cards: this.community_cards }
-            for (var i = 0; i < this.players.length; i++) {
-                this.socketEngine.emit("cards", data, this.players[i].id)
-            }
+          
         } else if (this.state == states[1]) { //FLOP
             this.addCardsToCommunity(3)
             var data = { community_cards: this.community_cards }
@@ -102,8 +99,6 @@ class Round {
                 players: obf,
                 my_player: this.players[i]
             }
-            console.log("emitting new preflop ")
-            console.log(new_data.my_player)
             this.socketEngine.emit("send_data", new_data, this.players[i].id)
         }
     }

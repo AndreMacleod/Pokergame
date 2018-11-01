@@ -16,28 +16,17 @@ class Game {
 
     newRound() {
         console.log("you started a round")
-        this.round = null
-        var obf = this.obfuscatePlayerCards()
-        for (var i = 0; i < this.getTable().getPlayers().length; i++) {
-            var data = {
-                players: obf,
-                my_player: this.getTable().getPlayers()[i]
-             
-            }
-            console.log("new round and emitting " + data.my_player)
-           
-            this.socketEngine.emit("send_data", data, this.getTable().getPlayers()[i].id)
+        var data = {
+            display_bar: false,
+            community_cards : []
         }
-        console.log("old round ")
-        console.log(this.round)
+        for (var i = 0; i < this.getTable().getPlayers().length; i++) {
+            this.socketEngine.emit("reset_round", data, this.getTable().getPlayers()[i].id)
+        }
         this.round = new Round(this, this.socketEngine) //PASS GAME to round to recursively call
-        console.log(this.round.getDeck().deck.length)
-        console.log("created a round ")
-        console.log(this.round)
-
         this.round.stateAction()
-
-
+       
+       
     }
     addConnection(id) {
         this.connected.push(id)
