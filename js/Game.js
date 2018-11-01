@@ -13,10 +13,10 @@ class Game {
 
     newRound() {
         console.log("you started a round")
-        if (this.round == null) {
+        
             this.round = new Round(this, this.socketEngine) //PASS GAME to round to recursively call
-            this.round.getActions()
-        }
+            this.round.stateAction()
+        
     }
     addConnection(id) {
         this.connected.push(id)

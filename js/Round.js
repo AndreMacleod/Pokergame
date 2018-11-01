@@ -93,6 +93,7 @@ class Round {
             this.getActions() // call get bets on next player
         } else {
             console.log("going next STATE")
+            this.player_index = 0
             console.log(this.nextState())
             this.stateAction() //finished iterating players so go next state
         }

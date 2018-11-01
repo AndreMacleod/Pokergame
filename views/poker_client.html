@@ -30,18 +30,55 @@
         console.log(my_player)
     })
     socket.on('send_actions', function (actions) {
-        console.log("EEE")
-        console.log(actions)
-        var action = "FOLD"
-        socket.emit('chose_action',action)
-    })
+        console.log("was sent actions by server")
+        display_action_bar = true
 
+    })
+    function submitAction(action, bet_amount) {
+
+        var data = {
+            action: action,
+            bet_amount: bet_amount
+        }
+        console.log("sending action " + action + " to server")
+
+        socket.emit('choose_action', data)
+        display_action_bar = false;
+    }
+    function fold() {
+        submitAction("FOLD", null)
+    }
+    function check() {
+        submitAction("CHECK", null)
+    }
+    function bet() {
+        submitAction("BET", 1000)
+    }
     var bg
     var table_img
     var table_scale = (window.innerWidth + window.innerHeight / 2) / 550
     var card_scale = (window.innerWidth + window.innerHeight / 2) / 25
     var card_image_arr = []
+    var display_action_bar = false;
 
+    var fold_button = {
+        w:100,
+        h:100,
+        x:50,
+        y:50
+    }
+    var check_button = {
+        w:100,
+        h:100,
+        x:180,
+        y:50
+    }
+    var bet_button = {
+        w:100,
+        h:100,
+        x:300,
+        y:50
+    }
 
     function initScales() {
         table_scale = (window.innerWidth + window.innerHeight / 2) / 550
@@ -66,27 +103,59 @@
         card_img = loadImage("ass/cards/card0.png")
         torterror = loadImage("ass/torterror.jpg");
         gabriel = loadImage("ass/garbriel.png");
+
         loadCards()
     }
 
     function draw() {
-            //drawtable()
-            background(bg)
+        //drawtable()
+        background(bg)
 
-            drawTable()
-            drawPlayers()
-            drawHoleCards()
-            drawDeck()
-            displayStack()
+        drawTable()
+        drawPlayers()
+        drawHoleCards()
+        drawDeck()
+        displayStack()
+        if (display_action_bar == true) {
+            drawActionBar()
         }
-    
+    }
+    function drawActionBar() {
+        ellipse(fold_button.x, fold_button.y, fold_button.w, fold_button.h)
+        ellipse(check_button.x, check_button.y, check_button.w, check_button.h)
+        ellipse(bet_button.x, bet_button.y, bet_button.w, bet_button.h)
+    }
+    function isButtonClicked(btn_x,btn_y,btn_w,btn_h) {
+        if(mouseX >= btn_x && mouseX <= btn_x + btn_w) {
+            if(mouseY > btn_y && mouseY <= btn_y + btn_h)
+            return true;
+        }
+    }
+    function mousePressed() {
+        var clicked_fold = isButtonClicked(fold_button.x, fold_button.y, fold_button.w, fold_button.h);
+      
+        if (clicked_fold) {
+            return fold()
+        }
+        var clicked_check = isButtonClicked(check_button.x, check_button.y, check_button.w, check_button.h);
+       
+        if (clicked_check) {
+
+            return check()
+        }
+        var clicked_bet = isButtonClicked(bet_button.x, bet_button.y, bet_button.w, bet_button.h);
+       
+         if (clicked_bet) {
+            return bet()
+        }
+    }
     function windowResized() { //auto called when resize browser
-            resizeCanvas(windowWidth, windowHeight);
-            initScales()
-        }
+        resizeCanvas(windowWidth, windowHeight);
+        initScales()
+    }
 
     function drawTable() {
-        if (table = ! null){
+        if (table = ! null) {
             image(table_img, window.innerWidth / 2 - table_img.width * table_scale / 2, window.innerHeight / 2 - table_img.height * (table_scale / 2) * 3 / 2, table_img.width * table_scale, table_img.height * table_scale * 3 / 2);
         }
     }
@@ -100,7 +169,7 @@
     function displayStack() {
         for (var i = 0; i < players.length; i++) {
             textSize(32)
-    
+
             text(players[i].stack, window.innerWidth * 3 / 5, window.innerHeight / 2 - table_img.height * (table_scale / 2) + table_img.height * table_scale * i * 3 / 4, 200, 200)
         }
     }
@@ -110,7 +179,6 @@
     }
 
     function drawHoleCards() {
-
 
 
         for (var i = 0; i < players.length; i++) {
@@ -143,6 +211,6 @@
 
             }
         }
-    
+
     }
 </script>

@@ -77,6 +77,7 @@ io.on('connection', (socket) => {
                 players: obf,
                 my_player: games[games.length - 1].getTable().getPlayers()[i]
             }
+          
             socketEngine.emit("send_data", data, games[games.length - 1].getTable().getPlayers()[i].id)
         }
     }
@@ -88,11 +89,11 @@ io.on('connection', (socket) => {
         //  game.cancelRound()
     });
 
-    socket.on("chose_action", function (action) {
-
+    socket.on("choose_action", function (data) {
+        console.log("CHOSE ACTION")
         var myGame = getMyGame(socket.id)
-        console.log("Selected action is " + action)
-        myGame.getRound().applyAction(action, action.bet_amount)
+        console.log("Selected action is " + data.action)
+        myGame.getRound().applyAction(data.action, data.bet_amount)
 
     })
 
