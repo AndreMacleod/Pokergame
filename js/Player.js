@@ -28,6 +28,12 @@ class Player {
     getStack() {
         return this.stack
     }
+    isBetValid(value) {
+        if(value > this.stack) {
+            return false
+        }
+        return true
+    }
     getBlindType() {
         return this.blind_type
     }

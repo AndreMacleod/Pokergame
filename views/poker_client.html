@@ -182,7 +182,7 @@
     }
 
     function drawDeck() {
-        image(card_image_arr[0], window.innerWidth / 2 - table_img.width * (table_scale) / 4, window.innerHeight / 2, card_scale, card_scale * 1.25)
+        image(card_image_arr[0], window.innerWidth / 2 - table_img.width * (table_scale) / 4, window.innerHeight / 2 - 20, card_scale, card_scale * 1.25)
     }
 
     function getSuitIndex(card) {
@@ -206,8 +206,7 @@
             var x = 0
 
           var x = getSuitIndex(community_cards[i])
-
-            image(card_image_arr[13 * x + community_cards[i].number], 50 * i, 300, card_scale, card_scale * 1.25)
+            image(card_image_arr[13 * x + community_cards[i].number], (window.innerWidth / 2 - table_img.width * (table_scale) / 4 )+ 50*(i+1), window.innerHeight / 2 - 20, card_scale, card_scale * 1.25)
         }
     }
     function drawHoleCards() {

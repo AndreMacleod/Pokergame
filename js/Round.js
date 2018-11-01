@@ -16,39 +16,53 @@ class Round {
 
         if (this.state == states[0]) { //PREFLOP
             this.preflop()
-            //console.log(this.players)
-            //  this.nextState()
+
         } else if (this.state == states[1]) { //FLOP
-            this.flop()
-            var data = {community_cards : this.community_cards}
-            for(var i =0;i<this.players.length;i++) {
-            this.socketEngine.emit("community_cards",data, this.players[i].id)
+            this.addCardsToCommunity(3)
+            var data = { community_cards: this.community_cards }
+            for (var i = 0; i < this.players.length; i++) {
+                this.socketEngine.emit("community_cards", data, this.players[i].id)
             }
-            console.log(this.community_cards)
+
+        } else if (this.state == states[2]) { //TURN
+            this.addCardsToCommunity(1)
+            var data = { community_cards: this.community_cards }
+            for (var i = 0; i < this.players.length; i++) {
+                this.socketEngine.emit("community_cards", data, this.players[i].id)
+            }
+
+        } else if (this.state == states[3]) { //RIVER
+            this.addCardsToCommunity(1)
+            var data = { community_cards: this.community_cards }
+            for (var i = 0; i < this.players.length; i++) {
+                this.socketEngine.emit("community_cards", data, this.players[i].id)
+            }
         }
+
         this.getActions()
-        //if round is over
-        //this.game.newRound()
+        console.log(this.community_cards)
     }
-    flop() {
+    addCardsToCommunity(amount) {
         var deck_array = this.deck.getDeck()
-        this.community_cards.push(deck_array.shift())
-        this.community_cards.push(deck_array.shift())
-        this.community_cards.push(deck_array.shift())
+        for (var i = 0; i < amount; i++) {
+            this.community_cards.push(deck_array.shift())
+        }
     }
+
     applyAction(action, bet_amount) {
         if (action == global_actions[0]) { //FOLD {}
             this.players[this.player_index].fold()
             console.log("player folded")
-
+        
         } else if (action == global_actions[1]) {//CHECK
             console.log("checked")
         } else if (action == global_actions[2]) { //BET
             if (this.players[this.player_index].isBetValid(bet_amount)) {
-                this.players[this.player_index].subtractStack(value) //remove from player
-                this.addToPot(value) //add to pot
+                this.players[this.player_index].subtractStack(bet_amount) //remove from player
+                this.addToPot(bet_amount) //add to pot
             }
         }
+        console.log("pot is " + this.pot)
         this.goNextPlayer()
     }
     getActions() {
