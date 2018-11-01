@@ -17,7 +17,7 @@ class Round {
     clonePlayers() {
         var players = this.game.getTable().getPlayers()
         var arr = []
-        for (var i = 0; i <players.length; i++) {
+        for (var i = 0; i < players.length; i++) {
             arr.push(new Player(players[i].id, players[i].stack, players[i].blind_type, players[i].has_folded))
         }
         return arr
@@ -27,7 +27,7 @@ class Round {
         if (this.state == states[0]) { //PREFLOP
             console.log("going preflop")
             this.preflop()
-          
+
         } else if (this.state == states[1]) { //FLOP
             this.addCardsToCommunity(3)
             var data = { community_cards: this.community_cards }
@@ -60,7 +60,10 @@ class Round {
         }
     }
 
-    applyAction(action, bet_amount) {
+    applyAction(action, bet_amount, socket_id) {
+        if (this.players[this.player_index].id != socket_id)
+            return //not this players turn
+
         if (action == global_actions[0]) { //FOLD {}
             this.players[this.player_index].fold()
             console.log("player folded")

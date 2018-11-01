@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
         console.log("CHOSE ACTION")
         var myGame = getMyGame(socket.id)
         console.log("Selected action is " + data.action)
-        myGame.getRound().applyAction(data.action, data.bet_amount)
+        myGame.getRound().applyAction(data.action, data.bet_amount,socket.id)
 
     })
 

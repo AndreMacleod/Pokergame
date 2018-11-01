@@ -143,17 +143,17 @@
             if (mouseY > btn_y && mouseY <= btn_y + btn_h)
                 return true;
         }
+        return false
     }
     function mousePressed() {
-        var clicked_fold = isButtonClicked(fold_button.x, fold_button.y, fold_button.w, fold_button.h);
+        var clicked_fold = dist(mouseX, mouseY,fold_button.x, fold_button.y);
 
-        if (clicked_fold) {
+        if (clicked_fold < fold_button.x/2) {
             return fold()
         }
-        var clicked_check = isButtonClicked(check_button.x, check_button.y, check_button.w, check_button.h);
+        var clicked_check = dist(mouseX, mouseY,check_button.x, check_button.y);
 
-        if (clicked_check) {
-
+        if (clicked_check < check_button.x/2) {
             return check()
         }
         var clicked_bet = isButtonClicked(bet_button.x, bet_button.y, bet_button.w, bet_button.h);
