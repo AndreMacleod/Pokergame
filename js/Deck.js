@@ -6,7 +6,7 @@ class Deck {
     generateDeck() {
         var temp = []
         for (var i = 0; i < suits.length; i++) {
-            for (var j = 1; j <= 13; j++) {
+            for (var j = 2; j <= 14; j++) {
                 temp.push(new Card(suits[i], j))
             }
         }
