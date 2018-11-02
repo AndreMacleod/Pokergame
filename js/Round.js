@@ -72,6 +72,7 @@ class Round {
             console.log("checked")
         } else if (action == global_actions[2]) { //BET
             if (this.players[this.player_index].isBetValid(bet_amount)) {
+                this.game.getTable().getPlayers()[this.player_index].subtractStack(bet_amount) //remove from player
                 this.players[this.player_index].subtractStack(bet_amount) //remove from player
                 this.addToPot(bet_amount) //add to pot
                 console.log("Remaining stack " + this.players[this.player_index].getStack())
@@ -93,8 +94,8 @@ class Round {
         var deck_array = this.deck.getDeck()
         var obf = this.obfuscatePlayerCards()
         for (var i = 0; i < this.players.length; i++) {
-    
-         
+
+
             var new_data = {
                 players: obf,
                 my_player: this.players[i]
@@ -161,7 +162,7 @@ class Round {
         console.log("getting winner " + this.players.length)
         for (var i = 0; i < this.players.length; i++) {
             if (this.players[i].getFoldedState() == false) {
-                return this.players[i]
+                return this.game.getTable().getPlayers()[i]
             }
         }
     }
