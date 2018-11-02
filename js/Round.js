@@ -149,23 +149,35 @@ class Round {
             this.getWinner().addStack(this.getPot())
             return this.game.newRound()
         }
+        console.log("upped index")
         this.player_index++
-        if (this.required_bet > 0) {
-            if (this.players[this.player_index].bet_amount < this.required_bet) {
-                //have not matched bet so send actions
+
+        if (this.player_index > this.players.length - 1) { //we past the end
+            console.log("got me once")
+            if (this.required_bet > 0 && this.players[0].bet_amount < this.required_bet) {
+                //next player has to match an existing bet 
+                console.log("YEAH U GOT ME")
+                this.player_index = 0
                 this.getActions() // call get bets on next player
-            } else { //full circle
+            } else if (this.required_bet == 0 || this.players[0].bet_amount == this.required_bet) {
+                //all bets are even, go next state
                 console.log("going next STATE")
                 this.player_index = 0
-                console.log(this.nextState())
-                this.stateAction() //finished iterating players so go next state
+                this.nextState()
+                this.stateAction()
             }
-        } else {
-            if (this.player_index < this.players.length - 1) {
-                console.log("going next player")
-                this.getActions() // call get bets on next player
-            }
+        } else if (this.required_bet == 0 || this.players[this.player_index].bet_amount < this.required_bet) {
+            //this player has not matched the bet
+            this.getActions() // call get bets on next player
+        } else if (this.players[this.player_index].bet_amount == this.required_bet) {
+            //all bets are even go next state
+            console.log("going next STATE 2")
+            this.player_index = 0
+            this.nextState()
+            this.stateAction()
         }
+
+
         /* console.log("index " + this.player_index)
          if (this.player_index < this.players.length - 1) {
              console.log("going next player")

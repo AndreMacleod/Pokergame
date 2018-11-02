@@ -5,7 +5,7 @@ class Player {
         this.blind_type = null
         this.hole_cards = hole_cards || []
         this.has_folded = false;
-        this.amount_betted
+        this.bet_amount= 0
     }
 
     //setters
