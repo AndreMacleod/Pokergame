@@ -33,11 +33,19 @@
     })
     socket.on('send_actions', function (actions) {
         console.log("was sent actions by server")
-        display_action_bar = true
-    
+        console.log(actions)
+        if (actions.options.indexOf("FOLD") > -1) {
+            display_action_bar.fold = true
+        }
+        if (actions.options.indexOf("CHECK") > -1) {
+            display_action_bar.check = true
+        }
+        if (actions.options.indexOf("BET") > -1) {
+            display_action_bar.bet = true
+        }
 
     })
-    socket.on("reset_round",function(data) {
+    socket.on("reset_round", function (data) {
         console.log("reset round")
         display_action_bar = data.display_bar
         community_cards = data.community_cards
@@ -56,7 +64,7 @@
         console.log("sending action " + action + " to server")
 
         socket.emit('choose_action', data)
-        display_action_bar = false;
+        display_action_bar = {};
     }
     function fold() {
         submitAction("FOLD", null)
@@ -72,7 +80,7 @@
     var table_scale = (window.innerWidth + window.innerHeight / 2) / 550
     var card_scale = (window.innerWidth + window.innerHeight / 2) / 25
     var card_image_arr = []
-    var display_action_bar = false;
+    var display_action_bar = {};
 
     var fold_button = {
         w: 100,
@@ -130,14 +138,22 @@
         drawDeck()
         displayStack()
         drawCommunityCards()
-        if (display_action_bar == true) {
+      
+        if (Object.keys(display_action_bar).length > 0) {
             drawActionBar()
         }
     }
     function drawActionBar() {
-        ellipse(fold_button.x, fold_button.y, fold_button.w, fold_button.h)
-        ellipse(check_button.x, check_button.y, check_button.w, check_button.h)
-        ellipse(bet_button.x, bet_button.y, bet_button.w, bet_button.h)
+        if (display_action_bar.fold) {
+            ellipse(fold_button.x, fold_button.y, fold_button.w, fold_button.h)
+        }
+        if (display_action_bar.check) {
+            ellipse(check_button.x, check_button.y, check_button.w, check_button.h)
+
+        } if (display_action_bar.bet) {
+            ellipse(bet_button.x, bet_button.y, bet_button.w, bet_button.h)
+
+        }
     }
     function isButtonClicked(btn_x, btn_y, btn_w, btn_h) {
         if (mouseX >= btn_x && mouseX <= btn_x + btn_w) {
@@ -147,19 +163,19 @@
         return false
     }
     function mousePressed() {
-        var clicked_fold = dist(mouseX, mouseY,fold_button.x, fold_button.y);
+        var clicked_fold = dist(mouseX, mouseY, fold_button.x, fold_button.y);
 
-        if (clicked_fold < fold_button.w/2) {
+        if (clicked_fold < fold_button.w / 2) {
             return fold()
         }
-        var clicked_check = dist(mouseX, mouseY,check_button.x, check_button.y);
+        var clicked_check = dist(mouseX, mouseY, check_button.x, check_button.y);
 
-        if (clicked_check < check_button.w/2) {
+        if (clicked_check < check_button.w / 2) {
             return check()
         }
-        var clicked_bet = dist(mouseX, mouseY,bet_button.x, bet_button.y);
+        var clicked_bet = dist(mouseX, mouseY, bet_button.x, bet_button.y);
 
-        if (clicked_bet < bet_button.w/2) {
+        if (clicked_bet < bet_button.w / 2) {
             return bet()
         }
     }
@@ -212,8 +228,8 @@
         for (var i = 0; i < community_cards.length; i++) {
             var x = 0
 
-          var x = getSuitIndex(community_cards[i])
-            image(card_image_arr[13 * x + community_cards[i].number], (window.innerWidth / 2 - table_img.width * (table_scale) / 4 )+  card_scale * 1.25*(i+1), window.innerHeight / 2 - 20, card_scale, card_scale * 1.25)
+            var x = getSuitIndex(community_cards[i])
+            image(card_image_arr[13 * x + community_cards[i].number], (window.innerWidth / 2 - table_img.width * (table_scale) / 4) + card_scale * 1.25 * (i + 1), window.innerHeight / 2 - 20, card_scale, card_scale * 1.25)
         }
     }
     function drawHoleCards() {
@@ -302,7 +318,7 @@
     function sortNumber(a, b) {
         return a - b;
     }
-    
+
     number_array.sort(sortNumber)
     for (var i = 0; i < number_array.length - 1; i++) {
         if (number_array[i] == number_array[i + 1]) {
@@ -321,7 +337,7 @@
     if (straight_array.length > 1) {
         console.log("straight_time " + straight_array)
     }
-    if (number_array[number_array.length - 1] == 14 && straight_array.length == 1 && straight_array[0] == 5){
+    if (number_array[number_array.length - 1] == 14 && straight_array.length == 1 && straight_array[0] == 5) {
         console.log('wheel straight')
     }
 

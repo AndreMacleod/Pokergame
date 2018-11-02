@@ -10,9 +10,9 @@ class Round {
         this.deck = new Deck()
         this.state = states[0] //set the init state to preflop
         this.players = this.clonePlayers()
-        console.log("new round started")
         this.deck.shuffle()
         this.player_index = 0
+        this.required_bet = 0
     }
     clonePlayers() {
         var players = this.game.getTable().getPlayers()
@@ -23,7 +23,7 @@ class Round {
         return arr
     }
     stateAction() {
-
+        this.required_bet = 0 //reset for each round
         if (this.state == states[0]) { //PREFLOP
             console.log("going preflop")
             this.preflop()
@@ -75,6 +75,10 @@ class Round {
                 this.game.getTable().getPlayers()[this.player_index].subtractStack(bet_amount) //remove from player
                 this.players[this.player_index].subtractStack(bet_amount) //remove from player
                 this.addToPot(bet_amount) //add to pot
+                if (bet_amount >= this.required_bet) {
+                    this.required_bet = bet_amount
+                    this.players[this.player_index].bet_amount = bet_amount
+                }
                 console.log("Remaining stack " + this.players[this.player_index].getStack())
             }
         }
@@ -83,10 +87,13 @@ class Round {
         this.goNextPlayer()
     }
     getActions() {
-
         var data = {
             options: global_actions
         }
+        if (this.required_bet > 0) {
+            data.options = ["FOLD", "BET"]
+        }
+
         console.log("emitting actions to id " + this.players[this.player_index].id)
         this.socketEngine.emit("send_actions", data, this.players[this.player_index].id)
     }
@@ -141,19 +148,35 @@ class Round {
             console.log("starting a new round SINCE WINNER ")
             this.getWinner().addStack(this.getPot())
             return this.game.newRound()
-
         }
-        console.log("index " + this.player_index)
-        if (this.player_index < this.players.length - 1) {
-            console.log("going next player")
-            this.player_index++
-            this.getActions() // call get bets on next player
+        this.player_index++
+        if (this.required_bet > 0) {
+            if (this.players[this.player_index].bet_amount < this.required_bet) {
+                //have not matched bet so send actions
+                this.getActions() // call get bets on next player
+            } else { //full circle
+                console.log("going next STATE")
+                this.player_index = 0
+                console.log(this.nextState())
+                this.stateAction() //finished iterating players so go next state
+            }
         } else {
-            console.log("going next STATE")
-            this.player_index = 0
-            console.log(this.nextState())
-            this.stateAction() //finished iterating players so go next state
+            if (this.player_index < this.players.length - 1) {
+                console.log("going next player")
+                this.getActions() // call get bets on next player
+            }
         }
+        /* console.log("index " + this.player_index)
+         if (this.player_index < this.players.length - 1) {
+             console.log("going next player")
+             this.player_index++
+             this.getActions() // call get bets on next player
+         } else {
+             console.log("going next STATE")
+             this.player_index = 0
+             console.log(this.nextState())
+             this.stateAction() //finished iterating players so go next state
+         }*/
 
 
     }

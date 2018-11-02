@@ -17,7 +17,7 @@ class Game {
     newRound() {
         console.log("you started a round")
         var data = {
-            display_bar: false,
+            display_bar: {},
             community_cards : []
         }
         for (var i = 0; i < this.getTable().getPlayers().length; i++) {
